@@ -3,7 +3,7 @@
 
 enum TokenType
 {
-    TK_STRING,
+    TK_STRING,  
     TK_DOUBLE,
 
     TK_IF,

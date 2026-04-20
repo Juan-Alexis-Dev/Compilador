@@ -94,8 +94,6 @@ Token Lexer::getNextToken()
                 log.push_back("Cadena encontrada: " + str);
                 return Token{ TK_STRING_LITERAL, str };
             }
-
-            log.push_back("Error: cadena no cerrada.");
             return Token{ TK_UNKNOWN, str };
         }
 
@@ -119,11 +117,9 @@ Token Lexer::getNextToken()
                     return Token{ TK_CHAR_LITERAL, ch };
                 }
 
-                log.push_back("Error: literal de carácter inválido: " + ch);
                 return Token{ TK_UNKNOWN, ch };
             }
 
-            log.push_back("Error: carácter no cerrado.");
             return Token{ TK_UNKNOWN, ch };
         }
 

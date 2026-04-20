@@ -5,8 +5,8 @@
 #include "Token.h"
 
 struct SymbolInfo {
-    TokenType type;        // TK_STRING o TK_DOUBLE
-    bool      initialized; // si ya recibió un valor
+    TokenType type;        
+    bool      initialized; 
 };
 
 class Semantico {
@@ -21,10 +21,8 @@ private:
     std::vector<Token> tokens;
     int pos;
 
-    // Tabla de símbolos plana — todas las variables viven aquí
     std::map<std::string, SymbolInfo> symbols;
 
-    // ── Navegación ────────────────────────────────────────────────
     Token current();
     Token peek(int offset = 0);
     Token consume();
@@ -33,13 +31,11 @@ private:
     bool  isAtEnd();
     void  synchronize();
 
-    // ── Tabla de símbolos ─────────────────────────────────────────
     bool      declareVariable(const std::string& name, TokenType type);
     bool      isDeclared(const std::string& name);
     TokenType getType(const std::string& name);
     void      markInitialized(const std::string& name);
 
-    // ── Sentencias ────────────────────────────────────────────────
     void analyzeProgram();
     void analyzeStatement();
     void analyzeVarDecl(TokenType typeToken);
@@ -49,7 +45,6 @@ private:
     void analyzeMostrarStmt();
     void analyzeBlock();
 
-    // ── Expresiones ───────────────────────────────────────────────
     TokenType analyzeExpr();
     TokenType analyzeComparison();
     TokenType analyzeTerm();

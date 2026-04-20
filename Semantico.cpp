@@ -1,18 +1,11 @@
 ﻿#include "Semantico.h"
 
-// ════════════════════════════════════════════════════════════════
-//  CONSTRUCTOR
-// ════════════════════════════════════════════════════════════════
 Semantico::Semantico(std::vector<Token> tokens)
 {
     this->tokens = tokens;
     this->pos = 0;
-    // symbols empieza vacío — se llena conforme se declaran variables
 }
 
-// ════════════════════════════════════════════════════════════════
-//  NAVEGACIÓN
-// ════════════════════════════════════════════════════════════════
 Token Semantico::current()
 {
     if (pos < (int)tokens.size()) return tokens[pos];
@@ -57,15 +50,9 @@ void Semantico::synchronize()
     }
 }
 
-// ════════════════════════════════════════════════════════════════
-//  TABLA DE SÍMBOLOS  (mapa plano, sin scopes)
-// ════════════════════════════════════════════════════════════════
-
-// Registra una variable nueva.
-// Si el nombre ya existe → error de redeclaración.
 bool Semantico::declareVariable(const std::string& name, TokenType type)
 {
-    if (symbols.count(name))
+    if (symbols.count(name)) 
     {
         errors.push_back("ERROR SEMANTICO: la variable '" + name +
             "' ya fue declarada anteriormente.");
@@ -77,29 +64,23 @@ bool Semantico::declareVariable(const std::string& name, TokenType type)
     return true;
 }
 
-// Comprueba si una variable fue declarada.
 bool Semantico::isDeclared(const std::string& name)
 {
     return symbols.count(name) > 0;
 }
 
-// Devuelve el tipo de una variable ya declarada.
 TokenType Semantico::getType(const std::string& name)
 {
     if (symbols.count(name)) return symbols[name].type;
     return TK_UNKNOWN;
 }
 
-// Marca una variable como inicializada.
 void Semantico::markInitialized(const std::string& name)
 {
     if (symbols.count(name))
         symbols[name].initialized = true;
 }
 
-// ════════════════════════════════════════════════════════════════
-//  PUNTO DE ENTRADA
-// ════════════════════════════════════════════════════════════════
 void Semantico::analyze()
 {
     log.push_back("Inicio del analisis semantico.");
@@ -118,9 +99,6 @@ void Semantico::analyzeProgram()
         analyzeStatement();
 }
 
-// ════════════════════════════════════════════════════════════════
-//  SENTENCIAS
-// ════════════════════════════════════════════════════════════════
 void Semantico::analyzeStatement()
 {
     Token t = current();
@@ -132,12 +110,11 @@ void Semantico::analyzeStatement()
     }
     if (t.type == TK_IF) { analyzeIfStmt();      return; }
     if (t.type == TK_FOR) { analyzeForStmt();     return; }
-    if (t.type == TK_MOSTRAR || t.type == TK_PRINT) { analyzeMostrarStmt(); return; }
+    if (t.type == TK_MOSTRAR || t.type == TK_PRINT || t.type == TK_LEER) { analyzeMostrarStmt(); return; }
     if (t.type == TK_LBRACE) { analyzeBlock();       return; }
 
     if (t.type == TK_IDENTIFIER)
     {
-        // ── x = expr ─────────────────────────────────────────────
         if (peek(1).type == TK_ASSIGN)
         {
             analyzeAssignment();
@@ -154,10 +131,9 @@ void Semantico::analyzeStatement()
     synchronize();
 }
 
-// ── TYPE IDENTIFIER (= expr)? ; ──────────────────────────────────
 void Semantico::analyzeVarDecl(TokenType typeToken)
 {
-    consume(); // consume el tipo
+    consume(); 
 
     if (!check(TK_IDENTIFIER)) { synchronize(); return; }
     std::string varName = current().value;
@@ -183,12 +159,11 @@ void Semantico::analyzeVarDecl(TokenType typeToken)
     match(TK_SEMICOLON);
 }
 
-// ── IDENTIFIER = expr ; ──────────────────────────────────────────
 void Semantico::analyzeAssignment()
 {
     std::string varName = current().value;
-    consume(); // IDENTIFIER
-    consume(); // =
+    consume(); 
+    consume(); 
 
     if (!isDeclared(varName))
     {
@@ -214,10 +189,9 @@ void Semantico::analyzeAssignment()
     match(TK_SEMICOLON);
 }
 
-// ── if ( expr ) block (else block)? ──────────────────────────────
 void Semantico::analyzeIfStmt()
 {
-    consume(); // if
+    consume(); 
     match(TK_LPAREN);
     analyzeExpr();
     match(TK_RPAREN);
@@ -229,10 +203,9 @@ void Semantico::analyzeIfStmt()
     log.push_back("Sentencia if verificada.");
 }
 
-// ── for ( init  cond ;  incr ) block ─────────────────────────────
 void Semantico::analyzeForStmt()
 {
-    consume(); // for
+    consume(); 
     match(TK_LPAREN);
 
     Token t = current();
@@ -265,10 +238,9 @@ void Semantico::analyzeForStmt()
     log.push_back("Sentencia for verificada.");
 }
 
-// ── mostrar/print ( expr ) ; ─────────────────────────────────────
 void Semantico::analyzeMostrarStmt()
 {
-    consume(); // mostrar / print
+    consume();
     match(TK_LPAREN);
     analyzeExpr();
     match(TK_RPAREN);
@@ -276,21 +248,15 @@ void Semantico::analyzeMostrarStmt()
     log.push_back("Sentencia mostrar/print verificada.");
 }
 
-// ── { statement* } ───────────────────────────────────────────────
-// Sin scopes: solo recorre las sentencias internas, sin abrir ni
-// cerrar ningún nivel en la tabla de símbolos.
 void Semantico::analyzeBlock()
 {
-    consume(); // {
+    consume(); 
     while (!isAtEnd() && !check(TK_RBRACE))
         analyzeStatement();
     match(TK_RBRACE);
     log.push_back("Bloque verificado.");
 }
 
-// ════════════════════════════════════════════════════════════════
-//  EXPRESIONES
-// ════════════════════════════════════════════════════════════════
 TokenType Semantico::analyzeExpr()
 {
     TokenType left = analyzeComparison();

@@ -116,7 +116,7 @@ void Parser::parseStatement()
         return;
     }
 
-    if (t.type == TK_MOSTRAR || t.type == TK_PRINT)
+    if (t.type == TK_MOSTRAR || t.type == TK_LEER || t.type == TK_PRINT)
     {
         log.push_back("Sentencia mostrar/print detectada.");
         parseMostrarStmt();
@@ -130,7 +130,7 @@ void Parser::parseStatement()
         return;
     }
 
-    if (t.type == TK_IDENTIFIER)
+    if (t.type == TK_IDENTIFIER) // 
     {
         if (peek(1).type == TK_ASSIGN)
         {
@@ -325,7 +325,7 @@ void Parser::parseBlock()
         log.push_back("Bloque valido.");
 }
 
-void Parser::parseExpr()
+void Parser::parseExpr() 
 {
     parseComparison();
     while (check(TK_EQUAL_EQUAL) || check(TK_NOT_EQUAL))
