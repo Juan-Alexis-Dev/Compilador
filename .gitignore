@@ -1,8 +1,31 @@
-# Ignorar configuraciones de Visual Studio
+# Carpetas de compilación de Visual Studio
 .vs/
-*.vsidx
+x64/
+x86/
+Debug/
+Release/
+*/x64/
+*/Debug/
+*.tlog/
+
+# Binarios y archivos intermedios
+*.exe
+*.dll
+*.obj
+*.pdb
+*.ilk
+*.idb
+*.ipch
+*.lastbuildstate
+*.recipe
+*.metagen
+*.cache
+*.log
+
+# Configuración personal de Visual Studio
 *.user
 *.suo
-*.log
-bin/
-obj/
+*.vsidx
+
+# Documentación generada (se regenera con Doxygen)
+doxygen_output/
