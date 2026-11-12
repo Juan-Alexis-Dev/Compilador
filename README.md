@@ -6,9 +6,14 @@ Compilador educativo para un lenguaje propio en español, con interfaz gráfica 
 ![.NET](https://img.shields.io/badge/Windows_Forms-C++/CLI-512BD4?logo=dotnet&logoColor=white)
 ![Visual Studio](https://img.shields.io/badge/Visual_Studio-2022-5C2D91?logo=visualstudio&logoColor=white)
 
-## Captura
+## Capturas del compilador
 
+### Imagen del compilador
 ![Interfaz del compilador](docs/capturas/compilador.png)
+### Prueba con codigo corto
+![Codigo de prueba](docs/capturas/pruebas.png)
+### Prueba de manejo de errores 
+![Prueba de errores](docs/capturas/error.png)
 
 ## Fases implementadas
 
@@ -61,5 +66,5 @@ main.cpp           punto de entrada
 
 ## Autor
 
-**Juan Alexis Martínez Morán** – Proyecto de la materia de Lenguajes y Autómatas, Universidad Cuauhtémoc Querétaro
-<!-- Ajusta el nombre de la materia si es otro. -->
+**Juan Alexis Martínez Morán** – Proyecto de la materia de LCompiladores, Universidad Cuauhtémoc Querétaro
+[LinkedIn](https://www.linkedin.com/in/juan-alexis-dev/) · [GitHub](https://github.com/Juan-Alexis-Dev)
